@@ -4,11 +4,11 @@ ModelAutopsy is a high-performance, hybrid-engine (Rust/C++) Machine Learning de
 
 ## Features
 
-*   **🛡 Hybrid Engine:** Rust (Safety) + C++ (Speed).
-*   **🔍 Deep Analysis:** Instantly detects NaN, Inf, Vanishing, and Exploding values.
-*   **📊 Advanced Metrics:** Calculates L2 Norm, Variance, Mean, Min/Max for statistical health.
-*   **🎨 IDE Integration:** Includes Rich Console UI and Python Decorators for real-time training loops.
-*   **🚀 Zero-Copy:** Direct memory access for maximum performance on large tensors.
+*   **Hybrid Engine:** Rust (Safety) + C++ (Speed).
+*   **Deep Analysis:** Instantly detects NaN, Inf, Vanishing, and Exploding values.
+*   **Advanced Metrics:** Calculates L2 Norm, Variance, Mean, Min/Max for statistical health.
+*   **IDE Integration:** Includes Rich Console UI and Python Decorators for real-time training loops.
+*   **Zero-Copy:** Direct memory access for maximum performance on large tensors.
 
 ## Installation
 

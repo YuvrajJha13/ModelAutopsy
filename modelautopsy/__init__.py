@@ -1,7 +1,9 @@
 """
 ModelAutopsy: Enterprise ML Debugging Library.
 """
+# Import Debugger
 from .debugger import watch
+from .debugger import analyze as _internal_analyze
 
 # Engine Detection
 ENGINE_STATUS = "Unknown"
@@ -17,10 +19,8 @@ except ImportError:
         ENGINE_STATUS = "Pure Python (Slow) 🐢"
 
 # Expose Analyze
-from .debugger import analyze as _internal_analyze
-
 def analyze(tensor):
-    """Public API."""
+    """Public API. Analyzes tensor using best available engine."""
     return _internal_analyze(tensor)
 
 __all__ = ["watch", "analyze", "ENGINE_STATUS"]

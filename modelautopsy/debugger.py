@@ -1,3 +1,6 @@
+"""
+Reinforced IDE Debugger.
+"""
 import functools
 import inspect
 import numpy as np
@@ -6,7 +9,7 @@ from rich.table import Table
 
 console = Console()
 
-# 1. Load Rust Engine (New Name)
+# 1. Load Rust Engine
 try:
     import modelautopsy_rust
     RUST_AVAILABLE = True
@@ -45,7 +48,7 @@ def _convert_rust_to_dict(rust_obj):
     }
 
 def analyze(tensor):
-    """Internal Analyze Function."""
+    """Performs the C++ scan safely."""
     tensor = _prepare_tensor(tensor)
     if tensor is None: return None
 
@@ -75,11 +78,15 @@ def _log_error(func, source, report):
     t.add_row("[dim]Source:[/dim]", f"[bold]{source}[/bold]")
     t.add_row("[dim]NaN Count:[/dim]", f"[red]{report['nan_count']}[/red]")
     t.add_row("[dim]Inf Count:[/dim]", f"[red]{report['inf_count']}[/red]")
-    t.add_row("[dim]L2 Norm:[/dim]", f"{report['l2_norm']:.4e}")
-    t.add_row("[dim]Variance:[/dim]", f"{report['variance']:.4e}")
+    t.add_row("[dim]Mean:[/dim]", f"{report['mean']:.4e}")
+    t.add_row("[dim]L2 Norm:[/dim]", f"{report['l2_norm']:.4e}") 
+    t.add_row("[dim]Variance:[/dim]", f"{report['variance']:.4e}") 
     console.print(t)
 
 def watch(drop_into_debugger=False, verbose=True, inspect_args=True, inspect_return=True):
+    """
+    Enhanced Decorator.
+    """
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -92,6 +99,7 @@ def watch(drop_into_debugger=False, verbose=True, inspect_args=True, inspect_ret
             
             failure_detected = False
             
+            # Scan Inputs
             if inspect_args:
                 for name, val in bound_args.arguments.items():
                     rep = analyze(val)
@@ -99,8 +107,10 @@ def watch(drop_into_debugger=False, verbose=True, inspect_args=True, inspect_ret
                         _log_error(func.__name__, f"Input '{name}'", rep)
                         failure_detected = True
 
+            # Execute
             result = func(*args, **kwargs)
 
+            # Scan Output
             if inspect_return:
                 rep = analyze(result)
                 if rep and (rep['nan_count'] > 0 or rep['inf_count'] > 0):
@@ -110,6 +120,7 @@ def watch(drop_into_debugger=False, verbose=True, inspect_args=True, inspect_ret
             if verbose and not failure_detected:
                 console.print(f"[green]✔[/green] [dim]{func.__name__} finished clean.[/dim]")
 
+            # Breakpoint
             if failure_detected and drop_into_debugger:
                 console.print("[bold red]🛑 Halting execution...[/bold red]")
                 import pdb; pdb.set_trace()
