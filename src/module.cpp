@@ -5,7 +5,6 @@
 
 namespace py = pybind11;
 
-// Wrapper for float32 arrays
 py::object analyze_f32(py::array_t<float> input) {
     py::buffer_info buf = input.request();
     if (buf.ndim != 1) throw std::runtime_error("Input must be 1-dimensional.");
@@ -25,7 +24,6 @@ py::object analyze_f32(py::array_t<float> input) {
     return result;
 }
 
-// Wrapper for float64 arrays
 py::object analyze_f64(py::array_t<double> input) {
     py::buffer_info buf = input.request();
     if (buf.ndim != 1) throw std::runtime_error("Input must be 1-dimensional.");
@@ -45,9 +43,7 @@ py::object analyze_f64(py::array_t<double> input) {
     return result;
 }
 
-// Combined Analyze (Python API) - Auto-dispatches based on dtype
 py::object analyze(py::array input) {
-    // Dispatch based on dtype
     if (input.dtype().is(pybind11::dtype::of<float>())) {
         return analyze_f32(input.cast<py::array_t<float>>());
     } 
@@ -59,8 +55,8 @@ py::object analyze(py::array input) {
     }
 }
 
-PYBIND11_MODULE(mlguardian, m) {
-    m.doc() = "MLGuardian Enterprise: High-Precision, SIMD-Accelerated Engine";
-    
-    m.def("analyze", &analyze, "Auto-dispatching analysis (float32/float64). Returns Mean, Variance, L2 Norm.");
+// Renamed module to _core_cpp to avoid conflict with Python package
+PYBIND11_MODULE(_core_cpp, m) {
+    m.doc() = "MLGuardian C++ Engine";
+    m.def("analyze", &analyze, "C++ Analysis (float32/float64)");
 }
