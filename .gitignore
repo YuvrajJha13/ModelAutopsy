@@ -1,30 +1,22 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# Compiled Python C++ Extensions
 *.so
+*.pyd
+*.dylib
 
-# C / C++ Build artifacts
+# Python Build Folders
 build/
 dist/
 *.egg-info/
 .eggs/
 
-# Virtual Environments
+# Virtual Environment
 venv/
 ENV/
-env/
 
-# IDEs (VSCode, PyCharm)
+# Rust Build Artifacts (We upload CODE, not BINARIES)
+rust/target/
+rust/Cargo.lock
+
+# IDEs
 .vscode/
 .idea/
-*.swp
-*.swo
-
-# OS specific
-.DS_Store
-Thumbs.db
-rust/
-build/
-dist/
-*.egg-info/
