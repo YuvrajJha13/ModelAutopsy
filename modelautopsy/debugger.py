@@ -1,6 +1,3 @@
-"""
-Reinforced IDE Debugger (Rust/C++/Python).
-"""
 import functools
 import inspect
 import numpy as np
@@ -9,9 +6,9 @@ from rich.table import Table
 
 console = Console()
 
-# 1. Load Rust Engine
+# 1. Load Rust Engine (New Name)
 try:
-    import mlguardian_rust
+    import modelautopsy_rust
     RUST_AVAILABLE = True
 except ImportError:
     RUST_AVAILABLE = False
@@ -53,13 +50,13 @@ def analyze(tensor):
     if tensor is None: return None
 
     if RUST_AVAILABLE:
-        rust_obj = mlguardian_rust.rust_analyze(tensor)
+        rust_obj = modelautopsy_rust.rust_analyze(tensor)
         return _convert_rust_to_dict(rust_obj)
 
     if CPP_AVAILABLE:
         return _core_cpp.analyze(tensor)
 
-    # Python Fallback
+    console.print("[red]Warning: Using Pure Python (Slow)[/red]")
     return {
         "nan_count": np.isnan(tensor).sum(),
         "inf_count": np.isinf(tensor).sum(),
@@ -83,9 +80,6 @@ def _log_error(func, source, report):
     console.print(t)
 
 def watch(drop_into_debugger=False, verbose=True, inspect_args=True, inspect_return=True):
-    """
-    Enhanced Decorator.
-    """
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -98,7 +92,6 @@ def watch(drop_into_debugger=False, verbose=True, inspect_args=True, inspect_ret
             
             failure_detected = False
             
-            # Scan Inputs
             if inspect_args:
                 for name, val in bound_args.arguments.items():
                     rep = analyze(val)
@@ -106,10 +99,8 @@ def watch(drop_into_debugger=False, verbose=True, inspect_args=True, inspect_ret
                         _log_error(func.__name__, f"Input '{name}'", rep)
                         failure_detected = True
 
-            # Execute
             result = func(*args, **kwargs)
 
-            # Scan Output
             if inspect_return:
                 rep = analyze(result)
                 if rep and (rep['nan_count'] > 0 or rep['inf_count'] > 0):

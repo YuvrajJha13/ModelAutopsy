@@ -10,7 +10,7 @@ else:
 
 ext_modules = [
     Pybind11Extension(
-        "_core_cpp",  # Renamed module
+        "_core_cpp",
         sources=["src/module.cpp", "src/stats.cpp"],
         include_dirs=["include"],
         extra_compile_args=copt,
@@ -19,14 +19,14 @@ ext_modules = [
 ]
 
 setup(
-    name="mlguardian",
-    version="2.0.0", # Major version bump for structure change
+    name="modelautopsy",
+    version="1.0.0",
     author="Yuvraj Jha",
-    description="MLGuardian Enterprise: Hybrid Rust/C++ Engine",
+    description="ModelAutopsy: High-Performance ML Failure Detection",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/YuvrajJha13/MLGuardian",
-    packages=find_packages(exclude=("tests", "examples")), # Finds 'mlguardian' folder
+    packages=find_packages(exclude=("tests", "examples")),
     ext_modules=ext_modules,
     install_requires=["numpy", "rich"],
     setup_requires=["pybind11"],

@@ -1,0 +1,16 @@
+[package]
+name = "modelautopsy_rust"
+version = "1.0.0"
+edition = "2021"
+
+[lib]
+name = "modelautopsy_rust"
+crate-type = ["cdylib"]
+
+[dependencies]
+# Using specific latest stable pyo3 version
+pyo3 = { version = "0.20", features = ["extension-module"] }
+# Using specific latest numpy crate
+numpy = "0.20"
+# Rayon for threading (If this fails, we remove it next)
+rayon = "1.8"
