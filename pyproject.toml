@@ -1,3 +1,22 @@
 [build-system]
-requires = ["setuptools>=40.8.0", "wheel", "pybind11>=2.10.0"]
+requires = ["setuptools>=40.8.0", "wheel", "pybind11>=2.10.0", "maturin>=1.0.0"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "modelautopsy"
+version = "1.0.4"
+description = "ModelAutopsy: High-Performance ML Failure Detection with Rust+C++ Hybrid Engine"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["numpy", "rich"]
+
+[project.optional-dependencies]
+dev = ["pytest", "maturin", "pybind11"]
+
+[tool.maturin]
+manifest-path = "rust/Cargo.toml"
+module-name = "modelautopsy_rust"
+
+[tool.cibuildwheel]
+# Build wheels for all platforms
+build = "*"
