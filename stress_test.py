@@ -1,4 +1,4 @@
-from debugger import watch
+from modelautopsy import watch
 import numpy as np
 
 @watch()

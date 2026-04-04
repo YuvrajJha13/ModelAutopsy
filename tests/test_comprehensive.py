@@ -5,7 +5,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import modelautopsy
-from debugger import watch, _prepare_tensor
+from modelautopsy.debugger import watch, _prepare_tensor
 
 class TestCoreEngine:
     def test_empty_tensor(self):

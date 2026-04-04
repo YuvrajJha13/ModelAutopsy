@@ -1,6 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <stdexcept>
+#include <cmath>
 #include "../include/stats.h"
 
 namespace py = pybind11;
@@ -44,6 +45,20 @@ py::object analyze_f64(py::array_t<double> input) {
 }
 
 py::object analyze(py::array input) {
+    // Handle empty arrays gracefully
+    if (input.size() == 0) {
+        py::dict result;
+        result["nan_count"] = 0;
+        result["inf_count"] = 0;
+        result["valid_count"] = 0;
+        result["mean"] = 0.0;
+        result["variance"] = 0.0;
+        result["l2_norm"] = 0.0;
+        result["min_val"] = 0.0;
+        result["max_val"] = 0.0;
+        return result;
+    }
+
     if (input.dtype().is(pybind11::dtype::of<float>())) {
         return analyze_f32(input.cast<py::array_t<float>>());
     } 
@@ -57,6 +72,6 @@ py::object analyze(py::array input) {
 
 // Renamed module to _core_cpp to avoid conflict with Python package
 PYBIND11_MODULE(_core_cpp, m) {
-    m.doc() = "MLGuardian C++ Engine";
+    m.doc() = "MLGuardian C++ Engine - High Performance Tensor Analysis";
     m.def("analyze", &analyze, "C++ Analysis (float32/float64)");
 }

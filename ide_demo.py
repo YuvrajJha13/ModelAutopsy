@@ -1,5 +1,5 @@
 import numpy as np
-from debugger import watch
+from modelautopsy import watch
 
 @watch()
 def training_step(data):
